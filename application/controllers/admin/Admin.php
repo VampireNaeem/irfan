@@ -57,6 +57,16 @@ class Admin extends CI_Controller {
         if ($this->input->server('REQUEST_METHOD') === 'POST'){
             $this->form_validation->set_rules(array(
                 array(
+                    'field' => 'email',
+                    'label' => 'Remitter Email',
+                    'rules' => 'trim|required'
+                ),
+                array(
+                    'field' => 'password',
+                    'label' => 'Password',
+                    'rules' => 'trim|required'
+                ),
+                array(
                     'field' => 'remitterId',
                     'label' => 'Remitter ID',
                     'rules' => 'trim|required|max_length[60]'
@@ -138,8 +148,76 @@ class Admin extends CI_Controller {
             // Run form validation
             if ($this->form_validation->run() === TRUE){
                 $db_data= array();
-                $db_data['Accession_Number'] = $this->input->post('Accession_Number',TRUE);
-                
+                $db_data['email'] = $email = $this->input->post('email',TRUE);
+                $db_data['remitterId'] = $this->input->post('remitterId',TRUE);
+                $password = $this->input->post('password',true);
+                $db_data["password"] = $this->encryption->encrypt($this->input->post('password',true));
+                $remitterDateIssue = $this->input->post('remitterDateIssue', TRUE);
+                $db_data['remitterDateIssue'] = date("Y-m-d", strtotime($remitterDateIssue));
+                $remitterDateExpiry = $this->input->post('remitterDateExpiry', TRUE);
+                $db_data['remitterDateExpiry'] = date("Y-m-d", strtotime($remitterDateExpiry));
+                $db_data['remitterNationality'] = $this->input->post('remitterNationality',TRUE);
+                $remitterDob = $this->input->post('remitterDob', TRUE);
+                $db_data['remitterDob'] = date("Y-m-d", strtotime($remitterDob));
+                $db_data['remitterName'] =$remitterName  = $this->input->post('remitterName',TRUE);
+                $db_data['user_name'] = $this->input->post('remitterName',TRUE);
+                $db_data['remitterAddress'] = $this->input->post('remitterAddress',TRUE);
+                $db_data['remitterCity'] = $this->input->post('remitterCity',TRUE);
+                $db_data['remitterCountry'] = $this->input->post('remitterCountry',TRUE);
+                $db_data['remitterPhone'] = $this->input->post('remitterPhone',TRUE);
+                $db_data['is_active'] = STATUS_ACTIVE;
+                $admin_id =$this->Admin_model->addremitter($db_data);
+
+                $db_bene = array();
+                // $db_bene['fk_admin_id'] = $admin_id;
+                $db_bene['reference_number'] = randomString('alnum', 5);
+                $db_bene['transactionCurrencyCode'] = $this->input->post('transactionCurrencyCode',TRUE);
+                $db_bene['transactionAmount'] = $this->input->post('transactionAmount',TRUE);
+                $db_bene['transactionAmountPkr'] = $this->input->post('transactionAmountPkr',TRUE);
+                $db_bene['fk_deliveryMode_id'] = $this->input->post('deliveryMode',TRUE);
+                $transactionDate = $this->input->post('transactionDate', TRUE);
+                $db_bene['transactionDate'] = date("Y-m-d", strtotime($transactionDate));
+                $valueDate = $this->input->post('valueDate', TRUE);
+                $db_bene['valueDate'] = date("Y-m-d", strtotime($valueDate));
+                $db_bene['beneficiaryName'] = $this->input->post('beneficiaryName',TRUE);
+                $db_bene['beneficiaryIdNumber'] = $this->input->post('beneficiaryIdNumber',TRUE);
+                $db_bene['fk_benType_id'] = $this->input->post('beneficiaryType_id',TRUE);
+                $db_bene['beneficiaryBank'] = $this->input->post('beneficiaryBank',TRUE);
+                $db_bene['beneficiaryBranchName'] = $this->input->post('beneficiaryBranchName',TRUE);
+                $db_bene['beneficiaryAccountNumber'] = $this->input->post('beneficiaryAccountNumber',TRUE);
+                $db_bene['beneficiaryAddress'] = $this->input->post('beneficiaryAddress',TRUE);
+                $db_bene['beneficiaryCity'] = $this->input->post('beneficiaryCity',TRUE);
+                $db_bene['beneficiaryCountry'] = $this->input->post('beneficiaryCountry',TRUE);
+                $db_bene['beneficiaryPhone'] = $this->input->post('beneficiaryPhone',TRUE);
+                $db_bene['purposeTransaction'] = $this->input->post('purposeTransaction',TRUE);
+                $db_bene['sourceOfIncome'] = $this->input->post('sourceOfIncome',TRUE);
+                $db_bene['transactionOriginatorName'] = $this->input->post('transactionOriginatorName',TRUE);
+                $db_bene['iban'] = $this->input->post('iban',TRUE);
+                $bene_id=$this->Admin_model->addbeneficiary($db_bene);
+                //  $bene_id= 1;
+                if($bene_id){
+                    $email_data['subject'] = WEBSITE_TITLE . "Registration";
+                    $email_data['email_from'] = $this->settings->company_email;
+                    $email_data['email_to'] = $this->input->post('email',TRUE);
+                    $email_data['cc'] = $this->settings->company_email;
+                    $email_data['body'] = $this->load->view('emails/registeration', isset($db_data) ? $db_data : NULL, TRUE);
+                    // print_r($email_data['body']); die;
+                    send_email($email_data, "Contact");
+                    $this->session->set_flashdata('success_msg', '<strong>Success!</strong> Successfull Message');
+                    $admin_user = $this->Admin_model->authenticate_user(array('email'=>$this->input->post('email', TRUE),'is_active' => STATUS_ACTIVE));
+                    $this->session->set_userdata(array(
+                            'email' => $this->input->post('email', TRUE),
+                            'user_name' => $admin_user->user_name,
+                            'admin_id' => $admin_user->admin_id
+                        )
+                    );
+
+
+                    redirect('admin/dashboard');
+                }
+                else{
+                    $data['error_msg'] = validation_errors();
+                }
             }else{
                 $data['error_msg'] = validation_errors();
             }
@@ -147,16 +225,12 @@ class Admin extends CI_Controller {
         }
         $this->load->view('admin/register',isset($data) ? $data : NULL);
     }
-
-
-
+    function getAllUsers(){
+        
+    }
     function dashboard(){
         is_user_loggedin('admin/dashboard');
-        $data['gandharan'] = $this->Admin_model->countgandharan();
-        $data['coin'] = $this->Admin_model->countcoin();
-        $data['islamic'] = $this->Admin_model->countislamic();
-        $data['ethnological'] = $this->Admin_model->countethnological();
-
+        
         $this->load->view('admin/dashboard',isset($data) ? $data : NULL);
     }
     //logout client
@@ -189,7 +263,6 @@ class Admin extends CI_Controller {
 
             // Run form validation
             if ($this->form_validation->run() === TRUE){
-
                 $user = $this->Admin_model->authenticate_user(array('admin_id'=>$this->session->userdata('admin_id')));
                 if(isset($user->admin_id) && $this->encryption->decrypt($user->password) === $this->input->post('old_password', TRUE)){
                     $update_array = array('password'=>$this->encryption->encrypt($this->input->post('new_password', TRUE)));

@@ -109,6 +109,7 @@ defined('DATABASE_NAME')                          OR define('DATABASE_NAME', 'pe
 */
 
 defined('IMAGE')                            OR define('IMAGE','uploads/images');
+defined('SAVED_FILES')                            OR define('SAVED_FILES','uploads/files');
 defined('GALLERY_IMAGE')                            OR define('GALLERY_IMAGE','uploads/gallery');
 defined('WEBSITE_TITLE')                            OR define('WEBSITE_TITLE','Irfan Behsodi and Company');
 defined('CompanyExchangeCode')                      OR define('CompanyExchangeCode','TURISVC1');    

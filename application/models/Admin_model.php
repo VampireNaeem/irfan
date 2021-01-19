@@ -15,9 +15,18 @@ class Admin_model extends CI_Model
         $this->table_name = "ki_admin";
         $this->table_deliveryMode= "ki_deliveryMode";
         $this->table_benificiaryType= "ki_benificiaryType";
+        $this->table_beneficiary_detail= "ki_beneficiary_detail";
     }
     function authenticate_user($data){
         return $this->db->get_where($this->table_name, $data)->row();
+    }
+    function addremitter($db_data){
+        $this->db->insert($this->table_name,$db_data);
+        return $this->db->insert_id();
+    }
+    function addbeneficiary($db_bene){
+        $this->db->insert($this->table_beneficiary_detail,$db_bene);
+        return $this->db->insert_id();
     }
     function get_deliverymode(){
         return $this->db->get_where($this->table_deliveryMode)->result();
@@ -30,24 +39,5 @@ class Admin_model extends CI_Model
         $this->db->where('admin_id', $user_id);
         return $this->db->update($this->table_name, $data);
     }
-    function countgandharan(){
-        $this->db->where("Group_Classification =",'Gandharan');
-        $this->db->from($this->table_detail);
-       return $this->db->count_all_results();
-    }
-    function countcoin(){
-        $this->db->where("Group_Classification =",'Coins');
-        $this->db->from($this->table_detail);
-        return $this->db->count_all_results();
-    }
-    function countislamic(){
-        $this->db->where("Group_Classification =",'Islamic');
-        $this->db->from($this->table_detail);
-        return $this->db->count_all_results();
-    }
-    function countethnological(){
-        $this->db->where("Group_Classification =",'Ethnological');
-        $this->db->from($this->table_detail);
-        return $this->db->count_all_results();
-    }
+    
 }

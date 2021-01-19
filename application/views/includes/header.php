@@ -5,9 +5,9 @@
         <!-- Logo -->
         <a href="<?php echo base_url('admin/dashboard')?>" class="logo">
             <!-- mini logo for sidebar mini 50x50 pixels -->
-            <span class="logo-mini"><b>P</b>M</span>
+            <span class="logo-mini"><b></b></span>
             <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg">Peshawar Muesum</span>
+            <span class="logo-lg"><?php echo $this->settings->company_name; ?></span>
         </a>
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top">

@@ -6,11 +6,11 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            Ghandaran
+            Requests
         </h1>
         <ol class="breadcrumb">
             <li><a href="<?php echo base_url('admin/dashboard')?>"><i class="fa fa-dashboard"></i>Dashboard</a></li>
-            <li class="active">All Services</li>
+            <li class="active">All Requests</li>
         </ol>
     </section>
 
@@ -29,10 +29,13 @@
                             <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Accession Number</th>
-                                <th>Provenance</th>
-                                <th>image</th>
-                                <th>Group Classification</th>
+                                <th>Reference Number</th>
+                                <th>Remitter Name</th>
+                                <th>beneficiary Name</th>
+                                <th>transaction Amount</th>
+                                <th>Delivery Mode</th>
+                                <th>transactionDate</th>
+                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
@@ -60,14 +63,17 @@
 <script>
 
     oTable = $('#big_table').DataTable({
-        "ajax": '<?php echo base_url('detail/gandharan');?>',
+        "ajax": '<?php echo base_url('admin/detail/index');?>',
         columns: [
-            { data: "id" },
-            { data: "Accession_Number" },
-            { data: "Provenance" },
-            { data: "image" },
-            { data: "Group_Classification" },
-            { data: "Actions" }
+            { data: "admin_id" },
+            { data: "reference_number" },
+            { data: "remitterName" },
+            { data: "beneficiaryName" },
+            { data: "transactionAmount" },
+            { data: "mode_name" },
+            { data: "transactionDate" },
+            { data: "status" },
+            { data: "Actions" },
         ],
 
         buttons: [],

@@ -35,13 +35,19 @@
             <?php echo form_open(current_url(), array('name' => 'login', 'id' => 'login')) ?>
             <?php include(APPPATH . 'views/includes/_messages.php') ?>
             <div class="form-group has-feedback">
+                <input type="text" name="email" id="email" class="form-control" placeholder="Remitter Email">
+            </div>
+            <div class="form-group has-feedback">
+                <input type="text" name="password" id="password" class="form-control" placeholder="Password">
+            </div>
+            <div class="form-group has-feedback">
                 <input type="text" name="remitterId" id="remitterId" class="form-control" placeholder="Remitter ID">
             </div>
-            <div class="form-group has-feedback">
-                <input type="text" name="remitterDateIssue" id="remitterDateIssue" class="form-control" placeholder="Remitter’s I.D Number date of issue">
+            <div class="form-group has-feedback date">
+                <input type="text" name="remitterDateIssue" id="remitterDateIssue" class="form-control datepicker" placeholder="Remitter’s I.D Number date of issue">
             </div>
-            <div class="form-group has-feedback">
-                <input type="text" name="remitterDateExpiry" id="remitterDateExpiry" class="form-control" placeholder="Remitter’s I.D Number date of expiry">
+            <div class="form-group has-feedback date">
+                <input type="text" name="remitterDateExpiry" id="remitterDateExpiry" class="form-control datepicker" placeholder="Remitter’s I.D Number date of expiry">
             </div>
             <div class="form-group has-feedback">
                 <input type="text" name="remitterNationality" id="remitterNationality" class="form-control" placeholder="Remitter’s Nationality">
@@ -91,12 +97,15 @@
                 <input type="text" name="beneficiaryName" id="beneficiaryName" class="form-control" placeholder="Beneficiary Name">
             </div>
             <div class="form-group has-feedback">
-                <select class="form-control" id="deliveryMode" name="deliveryMode" value="<?php echo set_value('deliveryMode'); ?>">
+                <select class="form-control" id="beneficiaryType_id" name="beneficiaryType_id" value="<?php echo set_value('beneficiaryType_id'); ?>">
                     <option value="">-Beneficiary ID Type-</option>
                     <?php foreach ($beneficiaryType as $bene) { ?>
                         <option value="<?php echo $bene->benType_id ?>"> <?php echo $bene->benType_name ?> </option>
                     <?php } ?>
                 </select>
+            </div>
+            <div class="form-group has-feedback">
+                <input type="text" name="beneficiaryIdNumber" id="beneficiaryIdNumber" class="form-control" placeholder="ID/Passport Number">
             </div>
             <div class="form-group has-feedback">
                 <input type="text" name="beneficiaryBank" id="beneficiaryBank" class="form-control" placeholder="Beneficiary Bank">

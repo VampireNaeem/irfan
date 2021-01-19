@@ -22,20 +22,7 @@ $custom_link = $controller_name.'/'.$method_name;
                     <i class="fa fa-dashboard"></i> <span>Dashboard</span>
                 </a>
             </li>
-            <li class="treeview <?php if($controller_name == "gallery") echo "active open"; ?>">
-                <a href="#">
-                    <i class="fa fa-gear"></i> <span>Gallery</span>
-                    <span class="pull-right-container">
-                    <i class="fa fa-angle-left pull-right"></i>
-                  </span>
-                </a>
-                <ul class="treeview-menu">
-                    <li class="<?php if($controller_name == "gallery" && $method_name == "add") echo "active open"; ?>">
-                        <a href="<?php echo base_url('gallery/add')?>"><i class="fa fa-circle-o"></i> Add </a></li>
-                    <li class="<?php if($controller_name == "gallery" && $method_name == "index") echo "active open"; ?>">
-                        <a href="<?php echo base_url('gallery/index')?>"><i class="fa fa-circle-o"></i> All </a></li>
-                </ul>
-            </li>
+            
             <li class="treeview <?php if($controller_name == "settings") echo "active open"; ?>">
                 <a href="#">
                     <i class="fa fa-gear"></i> <span>Settings</span>

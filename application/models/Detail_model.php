@@ -26,6 +26,15 @@ class Detail_model extends CI_Model
     function select_single_detail($detail_id){
         return $this->db->get_where($this->table_name, array('id' => $detail_id), 1)->row();
     }
+    function get_record_txt($ref_name)
+    {
+        $this->db->select('*');
+        $this->db->from('ki_beneficiary_detail');
+        $this->db->join('ki_admin', 'ki_admin.admin_id = ki_beneficiary_detail.fk_admin_id');
+        $this->db->where('ki_beneficiary_detail.reference_number',$ref_name);
+        $query = $this->db->get();
+        return $query->result();
+    }
     function insertCSVRecord($db_data){
 
         $this->db->insert($this->table_name,$db_data);
